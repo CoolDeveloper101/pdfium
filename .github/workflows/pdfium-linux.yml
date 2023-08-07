@@ -50,5 +50,5 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: libpdfium
-          path: $HOME/repo/pdfium/out/Static/**/*.a
+          name: libpdfium.a
+          path: $HOME/repo/pdfium/out/Static/obj/libpdfium.a
