@@ -29,7 +29,7 @@ jobs:
       - name: Run a multi-line script
         run: |
           sudo apt-get update -y
-          sudo apy-get upgrade -y
+          sudo apt-get upgrade -y
           cd $HOME
           git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
           export PATH=$HOME/depot_tools/:$PATH
