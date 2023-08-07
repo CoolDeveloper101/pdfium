@@ -1,0 +1,55 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      # Runs a set of commands using the runners shell
+      - name: Run a multi-line script
+        run: |
+          sudo apt-get update -y
+          sudo apy-get upgrade -y
+          cd $HOME
+          git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+          export PATH=$HOME/depot_tools/:$PATH
+
+          curl -L https://github.com/rui314/mold/releases/download/v2.0.0/mold-2.0.0-x86_64-linux.tar.gz --output mold.tar.gz
+          tar -xf ./mold.tar.gz
+          export PATH=$PATH:$HOME/mold-2.0.0-x86_64-linux/bin/
+
+          mkdir repo
+          gclient config --unmanaged https://pdfium.googlesource.com/pdfium.git
+          gclient sync
+          cd pdfium
+          ./build/install-build-deps.sh
+
+          mkdir -p out/Static
+          gn args out/Static --args="use_goma = false is_debug=false pdf_use_skia=false pdf_enable_xfa=false pdf_enable_v8=false pdf_is_complete_lib=true"
+          cd out/Static
+          mold -run ninja
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: libpdfium
+          path: $HOME/repo/pdfium/out/Static/obj/libpdfium.a
