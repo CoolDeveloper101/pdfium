@@ -49,4 +49,4 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: libpdfium
-          path: ${{ github.workspace }}/repo/pdfium/out/Static/
+          path: out/Static/
