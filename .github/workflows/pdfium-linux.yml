@@ -36,7 +36,6 @@ jobs:
           export PATH=$PATH:$HOME/mold-2.0.0-x86_64-linux/bin/
 
           cd ${{ github.workspace }}
-          mkdir repo
           gclient config --unmanaged https://pdfium.googlesource.com/pdfium.git
           gclient sync
           cd pdfium
@@ -45,8 +44,9 @@ jobs:
           gn gen out/Static --args="use_goma=false is_debug=false pdf_use_skia=false pdf_enable_xfa=false pdf_enable_v8=false pdf_is_complete_lib=true"
           cd out/Static
           mold -run ninja
+          pwd
 
       - uses: actions/upload-artifact@v3
         with:
           name: libpdfium
-          path: out/Static/
+          path: ${{ github.workspace }}/pdfium/
