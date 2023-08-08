@@ -49,4 +49,4 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: libpdfium
-          path: /home/runner/work/pdfium/pdfium/pdfium/out/Static/
+          path: /home/runner/work/pdfium/pdfium/pdfium/out/Static/obj/libpdfium.a
