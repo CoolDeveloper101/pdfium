@@ -35,7 +35,7 @@ jobs:
           tar -xf ./mold.tar.gz
           export PATH=$PATH:$HOME/mold-2.0.0-x86_64-linux/bin/
 
-          cd $GITHUB_WORKSPACE
+          cd ${{ github.workspace }}
           mkdir repo
           gclient config --unmanaged https://pdfium.googlesource.com/pdfium.git
           gclient sync
@@ -49,4 +49,4 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: libpdfium
-          path: $GITHUB_WORKSPACE/repo/pdfium/out/Static/
+          path: ${{ github.workspace }}/repo/pdfium/out/Static/
